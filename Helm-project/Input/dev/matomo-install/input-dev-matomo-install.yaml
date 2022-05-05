@@ -1,0 +1,24 @@
+
+### For matomo ###
+matomo: 
+  ns: matomo-prodcution
+  env:
+  port:
+  nodeport: 
+  svcport: 
+  capacity_matomo:
+  limits:
+    memory_matomo: 
+    memory_db: 
+    cpu_matomo:
+    cpu_db:
+  requests:
+    memory_matomo:
+    memory_db:
+    cpu_matomo:
+    cpu_db:
+
+
+
+
+  

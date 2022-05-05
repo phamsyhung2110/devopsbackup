@@ -1,0 +1,39 @@
+Có 2 cách: 
+Cách 1: Tạo job trỏ tới nginx controller trong addiotionalscrape,không cần tạo service monitor
+	Làm theo https://kubernetes.github.io/ingress-nginx/user-guide/monitoring/
+Cách 2: Tạo service monitor,tên release phải đúng với tên release prometheus đã cài đặt
+
+
+
+https://www.logiq.ai/scraping-nginx-ingress-controller-metrics-using-helm-prometheus/
+
+Chỉnh sửa  value nginx ingress:
+   kubernetes-ingress: 
+   controller:  
+      metrics:  
+         enabled: true   
+         serviceMonitor:
+            enabled: true
+Chỉnh sửa service của nginx ingress:
+   metadata:
+  annotations:
+    prometheus.io/port: "10254"
+    prometheus.io/scrape: "true"
+  ports:
+  - name: prometheus
+    port: 10254
+    protocol: TCP
+    targetPort: prometheus
+Chỉnh sửa Deployment hoặc DaemonSet của nginx ingress:
+   ports:
+    - containerPort: 10254
+      name: prometheus
+      protocol: TCP
+Phần additionalScrapeConfig thêm:
+    - job_name: "ingress-prometheus"
+       static_configs:
+       - targets: ["10.104.76.57:10254"]
+    Trong đó 10.104.76.57 là IP hoặc service của ingress controller 
+    Upgrade helm và tạo dashboard
+   
+https://kubernetes.github.io/ingress-nginx/user-guide/monitoring/
