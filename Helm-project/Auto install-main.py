@@ -115,11 +115,15 @@ run_file_tem = str(get_custom_value(value_dir,run_dir,conf_dir)[2])
 ## Render to
 render_value = project_dir + "Custom-value-complete/value/%s/%s/"%(env,app_name) + os.path.basename(value_file_tem)
 render_run = project_dir + "Custom-value-complete/run/%s/%s/"%(env,app_name) + os.path.basename(run_file_tem)
-render_config = project_dir + "Custom-value-complete/config/%s/%s/"%(env,app_name) + os.path.basename(conf_file_tem)
+if mod_nginx == "--mod-nginx":
+    render_config = project_dir + "Custom-value-complete/config/%s/%s/"%(env,app_name) + os.path.basename(conf_file_tem)
+    conf_file = change_nginx(render_config)
+else:
+    print(" ")
 ## Value file complete
 value_file = change_values_file(render_value,value_file_tem)
 run_file = change_values_file(render_run,run_file_tem)
-conf_file = change_nginx(render_config)
+
 
 def install():
     global env, action, app_name, root_app, value_file, run_file
@@ -132,6 +136,11 @@ def install():
     ## Action
     print("Executing command: helm " + action + " " + app_name + " "  + project_dir + "Helm-app/%s/ -f "%app_name + value_file )
     time.sleep(0.5)
-    subprocess.call("helm " + action + " " + app_name + " " + project_dir + "Helm-app/%s/ -f "%app_name + value_file) 
-
-install()
+    subprocess.call("helm " + action + " " + app_name + " " + project_dir + "Helm-app/%s/ -f "%app_name + value_file)
+def uninstall():
+        print("Executing command: helm uninstall %s"%app_name )
+        subprocess.call("helm uninstall %s"%app_name)
+if action == "uninstall":
+    uninstall()
+else:
+    install()
