@@ -1,0 +1,89 @@
+## Environment
+env: {{ env.environment|default("dev", true)}}
+kind: {{ env.controller.kind|default("deployment", true)}}
+ns:  {{ env.namespace|default("lhc-install-dev", true)}}
+nginx_config: {{ env.nginx_config|default("lhc-install-nginx-config", true)}}
+stgclass: lhc-install-nfs-csi
+replicas: {{ env.replicas|default("3", true) }}
+ 
+# For service lhc-install-app
+svcport_lhc_app: {{ lhc.svcport|default("8080", true) }}
+tgport_lhc_app: {{ lhc.tgport|default("80", true) }}
+
+# For service php
+svcport_php: {{ php.svcport|default("9000", true) }}
+tgport_php: {{ php.tgport|default("9000", true) }}
+
+# For service nodejs helper
+svcport_nodejshp: {{ nodejs.svcport|default("8000", true) }}
+tgport_nodejshp: {{ nodejs.tgport|default("3000", true) }}
+
+# For service cobrowser
+svcport_cobrowser: {{ cobr.svcport|default("31130", true) }}
+tgport_cobrowser: {{ cobr.tgport|default("31130", true) }}
+# For service mysql 
+
+svcport_db: {{ db.svcport.tgport|default("3306", true) }}
+tgport_db: {{ db.tgport|default("3306", true) }}
+
+# For service PHP resque
+svcport_phpresque: {{ php_resque.svcport.tgport|default("31082", true) }}
+tgport_phpresque: {{ php_resque.tgport|default("9000", true) }}
+
+# For service redis
+svcport_redis: {{ redis.svcport.tgport|default("30379", true) }}
+tgport_redis: {{ redis.tgport|default("6379", true) }}
+
+# For volume
+pvclhcvolume: {{ pvclhcvolume|default("lhc-install-volume", true) }}
+pvcnginxconfig: {{ pvcnginxconfig|default("lhc-install-nginx-config", true) }}
+pvccode: {{ pvccode|default("lhc-install-code-volume", true) }}
+pvcdatabase: {{ pvcdatabase|default("lhc-install-db-volume", true) }}
+pvcphp: {{ pvcphp|default("lhc-install-php-volume", true) }}
+pvcnginx: {{ pvcnginx|default("lhc-install-nginx-volume", true) }}
+
+capacitylhc: {{ env.capacitylhc|default("600Mi", true)}}
+capacity_db: {{ env.capacity_db|default("1Gi", true)}}
+capacity_code: {{ env.capacity_db|default("1Gi", true)}}
+capacity_nginx: {{ env.capacity_nginx|default("300Mi", true)}}
+
+# For database
+dbenv: {{ env.dbenv|default("MYSQL_ROOT_PASSWORD", true)}}              
+secretname: {{ env.secretname|default("lhc-install-secret-db", true)}}
+dbconfig: {{ env.dbconfig|default("MYSQL_DATABASE", true)}}
+cfmname: {{ env.cfmname|default("lhc-install-db-config", true)}} 
+secret_tls_name: {{ env.secret_tls_name|default("lhc-install-secret-tls", true) }}
+hpa:
+  enabled: {{ env.hpaenable|default("false", true)}}
+
+## For resources:
+resources_lhc:
+  limits:
+    memory: {{ resources_lhc.limits.memory|default("200Mi", true)}}
+    cpu: {{ resources_lhc.limits.cpu|default("150m", true)}}
+  requests:
+    memory: {{ resources_lhc.requests.memory|default("200Mi", true)}}
+    cpu: {{ resources_lhc.requests.cpu|default("100m", true)}}
+resources_node:
+  limits:
+    memory: {{ resources_node.limits.memory|default("200Mi", true)}}
+    cpu: {{ resources_node.limits.cpu|default("200m", true)}}
+  requests:
+    memory: {{ resources_node.requests.memory|default("150Mi", true)}}
+    cpu: {{ resources_node.requests.cpu|default("150m", true)}}
+resources_db:
+  limits:
+    memory: {{ resources_db.limits.memory|default("300Mi", true)}}
+    cpu: {{ resources_db.limits.cpu|default("150m", true)}}
+  requests:
+    memory: {{ resources_db.requests.memory|default("200Mi", true)}}
+    cpu: {{ resources_db.requests.cpu|default("150m", true)}}
+resources_other:
+  limits:
+    memory: {{ resources_other.limits.memory|default("200Mi", true)}}
+    cpu: {{ resources_other.limits.cpu|default("150m", true)}}
+  requests:
+    memory: {{ resources_other.requests.memory|default("200Mi", true)}}
+    cpu: {{ resources_other.requests.cpu|default("150m", true)}}
+
+

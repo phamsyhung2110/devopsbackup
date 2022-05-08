@@ -1,0 +1,19 @@
+replicas: 1
+resources:
+  requests:
+    memory: 200Mi
+    cpu: 200m
+  limits:
+    memory: 300Mi
+    cpu: 300m
+env: Production
+ns: nginx-app-install-production
+kind: statefulset
+cpurate: 60
+
+hpa:
+  enabled: True
+
+service:
+  port: 8080
+  tgport: 80

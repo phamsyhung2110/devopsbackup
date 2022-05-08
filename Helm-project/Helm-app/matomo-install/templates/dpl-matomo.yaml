@@ -1,14 +1,14 @@
 # Create namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-  {{- if eq .Values.env "prod" }}
-  name: {{ .Values.ns}}
-  {{- else if eq .Values.env "qa" }}
-  name: {{ .Values.ns }}
-  {{- else if eq .Values.env "dev" -}}
-  name: {{ .Values.ns }}
-  {{- end }}
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   {{- if eq .Values.env "prod" }}
+#   name: {{ .Values.ns}}
+#   {{- else if eq .Values.env "qa" }}
+#   name: {{ .Values.ns }}
+#   {{- else if eq .Values.env "dev" -}}
+#   name: {{ .Values.ns }}
+#   {{- end }}
 ---
 {{- if eq .Values.env "prod" }}
 apiVersion: apps/v1

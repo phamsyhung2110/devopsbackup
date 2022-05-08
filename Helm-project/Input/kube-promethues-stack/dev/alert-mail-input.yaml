@@ -1,0 +1,8 @@
+## Mail alert
+config:
+  receivers:
+    to:
+    from:
+    auth_username:
+    auth_password:
+    auth_identity:

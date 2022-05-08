@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ matomo.ingressname|default("matomo-install-ingress", true) }}
+  labels:
+    name: {{ matomo.ingresslabelname|default("matomo-install-ingress", true) }}
+    namespace: {{ matomo.namespace|default("matomo-install-stag", true) }}
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+      - pshung.tk
+      secretName: {{ matomo.secret_tls_name|default("matomo-install-secret-tls", true) }}
+  rules:
+  - host: pshung.tk
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: {{ matomo.ingress_backend|default("matomo-install-stag", true) }}
+            port: 
+              number: 8880

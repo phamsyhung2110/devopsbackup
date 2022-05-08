@@ -1,14 +1,14 @@
-# Create namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-  {{- if eq .Values.env "prod" }}
-  name: {{ .Values.ns}}
-  {{- else if eq .Values.env "qa" }}
-  name: {{ .Values.ns }}
-  {{- else if eq .Values.env "dev" -}}
-  name: {{ .Values.ns }}
-  {{- end }}
+# # Create namespace
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   {{- if eq .Values.env "prod" }}
+#   name: {{ .Values.ns}}
+#   {{- else if eq .Values.env "qa" }}
+#   name: {{ .Values.ns }}
+#   {{- else if eq .Values.env "dev" -}}
+#   name: {{ .Values.ns }}
+#   {{- end }}
 ---
 #### For production environment ####
 {{- if eq .Values.env "prod" }}
@@ -98,6 +98,7 @@ spec:
   {{- if and (eq .Values.kind "statefulset") (eq .Values.env "prod") }}
   serviceName: {{ .Release.Name }}-db-production
   {{- end }}  
+  replicas: 1
   template:
     metadata:
       labels:
@@ -112,6 +113,11 @@ spec:
               secretKeyRef:
                 name:  {{ .Values.secretname }}
                 key: password
+          # - name: {{ .Values.dbconfig }}
+          #   valueFrom:
+          #     secretKeyRef:
+          #       name:  {{ .Values.cfmname }}
+          #       key: db-name
         resources:
         {{- include "db.resources" . | nindent 10 }}
         ports:
@@ -274,17 +280,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-app-qa
+  name: {{ .Release.Name }}-app-stag
   namespace: {{ .Values.ns }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-app-qa 
+      app: {{ .Release.Name }}-app-stag 
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-app-qa
+        app: {{ .Release.Name }}-app-stag
     spec:
       volumes:
       - name: {{ .Values.pvcnginx }}
@@ -300,7 +306,7 @@ spec:
         configMap:
           name: {{ .Values.nginx_config }}   
       containers:
-      - name: {{ .Release.Name }}-app-qa
+      - name: {{ .Release.Name }}-app-stag
         image: nginx:latest 
         resources:
         {{- include "lhc.resources" . | nindent 10 }}
@@ -319,7 +325,7 @@ spec:
           name: {{ .Values.pvcnginx }}
 
         # PHP container
-      - name: {{ .Release.Name }}-php-qa
+      - name: {{ .Release.Name }}-php-stag
         image: remdex/livehelperchat-php:latest
         resources:
         {{- include "lhc.resources" . | nindent 10 }}
@@ -348,22 +354,22 @@ kind: StatefulSet
 kind: Deployment
 {{- end }}
 metadata:
-  name: {{ .Release.Name }}-db-qa
+  name: {{ .Release.Name }}-db-stag
   namespace: {{ .Values.ns }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-db-qa
-  {{- if and (eq .Values.kind "statefulset") (eq .Values.env "prod") }}
-  serviceName: {{ .Release.Name }}-db-qa
+      app: {{ .Release.Name }}-db-stag
+  {{- if and (eq .Values.kind "statefulset") (eq .Values.env "stag") }}
+  serviceName: {{ .Release.Name }}-db-stag
   {{- end }}  
   template:
     metadata:
       labels:
-       app: {{ .Release.Name }}-db-qa
+       app: {{ .Release.Name }}-db-stag
     spec:    
       containers:
-      - name: {{ .Release.Name }}-db-qa
+      - name: {{ .Release.Name }}-db-stag
         image: mariadb:latest
         env:
           - name: {{ .Values.dbenv }}
@@ -387,16 +393,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-php-resque-qa
+  name: {{ .Release.Name }}-php-resque-stag
   namespace: {{ .Values.ns }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-php-resque-qa
+      app: {{ .Release.Name }}-php-resque-stag
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-php-resque-qa
+        app: {{ .Release.Name }}-php-resque-stag
     spec:
       volumes:
       - name:  {{ .Values.pvccode }}
@@ -406,7 +412,7 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.pvcphp }}
       containers:
-      - name: {{ .Release.Name }}-php-resque-qa
+      - name: {{ .Release.Name }}-php-resque-stag
         image: remdex/livehelperchat-php-resque:latest
         resources:
         {{- include "other.resources" . | nindent 10 }}
@@ -425,19 +431,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-cobrowser-qa
+  name: {{ .Release.Name }}-cobrowser-stag
   namespace: {{ .Values.ns }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-cobrowser-qa
+      app: {{ .Release.Name }}-cobrowser-stag
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-cobrowser-qa
+        app: {{ .Release.Name }}-cobrowser-stag
     spec:
       containers:
-      - name: {{ .Release.Name }}-cobrowser-qa
+      - name: {{ .Release.Name }}-cobrowser-stag
         image: remdex/livehelperchat-cobrowse:latest
         resources:
         {{- include "other.resources" . | nindent 10 }}
@@ -449,19 +455,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-nodejshelper-qa
+  name: {{ .Release.Name }}-nodejshelper-stag
   namespace: {{ .Values.ns }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-nodejshelper-qa
+      app: {{ .Release.Name }}-nodejshelper-stag
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-nodejshelper-qa
+        app: {{ .Release.Name }}-nodejshelper-stag
     spec:
       containers:
-      - name: {{ .Release.Name }}-nodejshelper-qa
+      - name: {{ .Release.Name }}-nodejshelper-stag
         image: remdex/livehelperchat-nodejshelper:latest
         resources:
         {{- include "nodejs.resources" . | nindent 10 }}
@@ -473,16 +479,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-php-cronjob-qa
+  name: {{ .Release.Name }}-php-cronjob-stag
   namespace: {{ .Values.ns }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-php-cronjob-qa
+      app: {{ .Release.Name }}-php-cronjob-stag
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-php-cronjob-qa
+        app: {{ .Release.Name }}-php-cronjob-stag
    
     spec:
       volumes:
@@ -491,7 +497,7 @@ spec:
           claimName: {{ .Values.pvccode }}
       - name: {{ .Values.pvcphp }}
       containers:
-      - name: {{ .Release.Name }}-php-cronjob-qa
+      - name: {{ .Release.Name }}-php-cronjob-stag
         image: remdex/livehelperchat-php-cronjob:latest
         resources:
         {{- include "other.resources" . | nindent 10 }}
@@ -509,16 +515,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-redis-qa
+  name: {{ .Release.Name }}-redis-stag
   namespace: {{ .Values.ns }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-redis-qa
+      app: {{ .Release.Name }}-redis-stag
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-redis-qa
+        app: {{ .Release.Name }}-redis-stag
     spec:
       containers:
       - name: {{ .Release.Name }}
@@ -612,7 +618,7 @@ spec:
   selector:
     matchLabels:
       app: {{ .Release.Name }}-db-devolopment
-  {{- if and (eq .Values.kind "statefulset") (eq .Values.env "prod") }}
+  {{- if and (eq .Values.kind "statefulset") (eq .Values.env "dev") }}
   serviceName: {{ .Release.Name }}-db-devolopment
   {{- end }}  
   template:

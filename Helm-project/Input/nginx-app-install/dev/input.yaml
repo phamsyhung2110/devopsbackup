@@ -1,0 +1,19 @@
+### For nginx ###
+nginx: 
+  namespace:
+  env: 
+  replicas: 1
+  resource:
+    requests_memory: 
+    requests_cpu: 
+    limits_memory: 
+    limits_cpu: 
+  kind: statefulset 
+  hpaenable: True 
+  service: 
+    port:
+    tgport: 
+  ingressname:
+  ingress_backend:
+  ingresslabelname:
+  

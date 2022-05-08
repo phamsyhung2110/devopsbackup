@@ -1,0 +1,19 @@
+## For lhc-app-install ###
+db: 
+  svcport: 
+  tgport: 
+php_resque:
+  svcport: 
+  tgport: 2000
+redis:
+  svcport: 
+  tgport:   
+
+
+
+  
+
+
+
+
+  

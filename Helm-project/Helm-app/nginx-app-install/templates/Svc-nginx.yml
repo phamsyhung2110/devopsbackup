@@ -6,7 +6,7 @@ metadata:
   {{- else }}
   name: {{ .Release.Name }}
   {{- end }}
-  namespace: nginx
+  namespace: {{ .Values.ns }}
 spec:
   selector:
     name: {{ .Release.Name }}

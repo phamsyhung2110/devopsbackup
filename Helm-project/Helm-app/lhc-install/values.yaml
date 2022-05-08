@@ -1,10 +1,11 @@
 ## Environment
-env: qa
+env: prod
 replicas: 1
-ns: lhc-QA
+kind: statefulset
+ns: lhc-install-production
 nginx_config: lhc-install-nginx-config
 stgclass: lhc-install-nfs-csi
-
+# config_map_data: {{- .Files.Get "./Helm-project/Custom-value-complete/config/site-nodejs.conf" | nindent 4 }}
 
 # For service lhc-app
 svcport_lhc_app: 8080
@@ -49,7 +50,9 @@ capacity_nginx: 300Mi
 
 # For database
 dbenv: MYSQL_ROOT_PASSWORD
-secretname: lhc-secret-db
+secretname: lhc-install-secret-db
+cfmname: lhc-install-db-config
+dbconfig: MYSQL_DATABASE
 
 hpa:
   enabled: false

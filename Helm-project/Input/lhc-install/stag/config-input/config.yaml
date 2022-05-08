@@ -1,0 +1,38 @@
+## Variables for nginx config
+server: 
+  listen: 
+  hostname: 
+  index: 
+  location:
+    proxy_pass_njs: 
+  root: 
+  error_log: 
+  access_log: 
+lhc: 
+  svcport: 8081
+  tgport: 80
+php:
+  enable: true
+  fascgi_pass: 
+  location: 
+  svcport: 
+  tgport: 
+nodejs:
+  enable: true
+  location: 
+  proxy_pass:
+  svcport: 
+  tgport: 
+cobr:
+  enable: true
+  location: 
+  proxy_pass: 
+  svcport: 
+  tgport:
+    
+
+
+
+
+
+  
