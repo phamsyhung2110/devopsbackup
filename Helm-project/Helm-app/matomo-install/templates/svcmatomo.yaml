@@ -2,25 +2,25 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Release.Name }}-dev
+  name: {{ .Release.Name }}-prod
   namespace: {{ .Values.ns }}
 spec:
   selector:
-    app: {{ .Release.Name }}-dev
+    app: {{ .Release.Name }}-prod
   type: ClusterIP
   ports:
   - name: matomo-port
-    port:  {{ .Values.port_matomo }}
-    targetPort:  {{ .Values.svcport_matomo }}
+    port:  {{ .Values.svcport_matomo }}
+    targetPort:  {{ .Values.port_matomo }}
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name:  {{ .Release.Name }}-db-dev
+  name:  {{ .Release.Name }}-db-prod
   namespace: {{ .Values.ns }}
 spec:
   selector:
-    app: {{ .Release.Name }}-db-dev
+    app: {{ .Release.Name }}-db-prod
   type: ClusterIP
   ports:
   - name: mysql-port
@@ -41,8 +41,8 @@ spec:
   type: ClusterIP
   ports:
   - name: matomo-port
-    port:  {{ .Values.port_matomo }}
-    targetPort:  {{ .Values.svcport_matomo }}
+    port:  {{ .Values.svcport_matomo }}
+    targetPort:  {{ .Values.port_matomo}}
     
 ---
 kind: Service

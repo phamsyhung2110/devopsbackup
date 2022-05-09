@@ -1,0 +1,12 @@
+nginxingress:
+  namespace:
+  controllerkind:
+  svcmonitor: 
+    release_promethues:
+    namespace:
+    namespaceSelector:
+  prometheusRule:
+    namespace:
+  nodeports: 
+    http: 
+    https:

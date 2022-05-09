@@ -1,0 +1,13 @@
+USER-SUPPLIED VALUES:
+controller:
+  kind: DaemonSet
+  metrics:
+    enabled: true
+    serviceMonitor:
+      additionalLabels:
+        release: prometheus-grafana
+      enabled: true
+    nodePorts:
+      http: 31826
+      https: 31213
+  

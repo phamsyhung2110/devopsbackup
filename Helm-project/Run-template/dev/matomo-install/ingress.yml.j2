@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ matomo.ingressname|default("matomo-install-ingress", true) }}
+  namespace: {{ matomo.namespace|default("matomo-install-dev", true) }}
   labels:
     name: {{ matomo.ingresslabelname|default("matomo-install-ingress", true) }}
     namespace: {{ matomo.namespace|default("matomo-install-dev", true) }}
@@ -16,7 +17,7 @@ spec:
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: /
         backend:
           service:
             name: {{ matomo.ingress_backend|default("matomo-install-dev", true) }}

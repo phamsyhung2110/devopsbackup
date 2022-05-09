@@ -48,22 +48,22 @@ kind: StatefulSet
 kind: Deployment
 {{- end }}
 metadata:
-  name: {{ .Release.Name }}-db-production
+  name: {{ .Release.Name }}-db-prod
   namespace: {{ .Values.ns }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-db-production
+      app: {{ .Release.Name }}-db-prod
   {{- if and (eq .Values.kind "statefulset") (eq .Values.env "prod") }}
-  serviceName: {{ .Release.Name }}-db-production
+  serviceName: {{ .Release.Name }}-db-prod
   {{- end }}  
   template:
     metadata:
       labels:
-       app: {{ .Release.Name }}-db-production
+       app: {{ .Release.Name }}-db-prod
     spec:    
       containers:
-      - name: {{ .Release.Name }}-db-production
+      - name: {{ .Release.Name }}-db-prod
         image: mariadb:latest
         env:
           - name: {{ .Values.dbenv }}
@@ -84,7 +84,7 @@ spec:
           claimName: {{ .Values.pvcdatabase }} 
 
 ### For Dev environment ###
-{{- else if .Values.env "dev" -}}
+{{- else if eq .Values.env "dev" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -110,7 +110,7 @@ spec:
         resources:
         {{- include "matomo.resources" . | nindent 10}}
         ports:
-        - containerPort: {{ .Values.ports }}
+        - containerPort: {{ .Values.port_matomo }}
         volumeMounts:
         - mountPath: "/var/www/html"
           name: {{ .Values.pvcmatomo }}
@@ -138,6 +138,79 @@ spec:
     spec:    
       containers:
       - name: {{ .Release.Name }}-db-dev
+        image: mariadb:latest
+        env:
+          - name: {{ .Values.dbenv }}
+            valueFrom:
+              secretKeyRef:
+                name:  {{ .Values.secretname }}
+                key: password
+        resources:
+        {{- include "db.resources" . | nindent 10 }}
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name:  {{ .Values.pvcdatabase }}
+          mountPath:  /var/lib/mysql
+      volumes:
+      - name: {{ .Values.pvcdatabase }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.pvcdatabase }}
+### For stag environment
+{{- else if eq .Values.env "stag" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-stag
+  namespace: {{ .Values.ns }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-stag
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-stag
+    spec:
+      volumes:
+      - name: {{ .Values.pvcmatomo }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.pvcmatomo }}
+
+      containers:
+      - name: {{ .Release.Name }}-stag
+        image: matomo:latest
+        resources:
+        {{- include "matomo.resources" . | nindent 10}}
+        ports:
+        - containerPort: {{ .Values.port_matomo }}
+        volumeMounts:
+        - mountPath: "/var/www/html"
+          name: {{ .Values.pvcmatomo }}
+---
+apiVersion: apps/v1
+{{- if eq .Values.kind "statefulset" }}
+kind: StatefulSet
+{{- else }}
+kind: Deployment
+{{- end }}
+metadata:
+  name: {{ .Release.Name }}-db-stag
+  namespace: {{ .Values.ns }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-db-stag
+  {{- if and (eq .Values.kind "statefulset") (eq .Values.env "prod") }}
+  serviceName: {{ .Release.Name }}-db-stag
+  {{- end }}  
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-db-stag
+    spec:    
+      containers:
+      - name: {{ .Release.Name }}-db-stag
         image: mariadb:latest
         env:
           - name: {{ .Values.dbenv }}

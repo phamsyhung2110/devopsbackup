@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: matomo-install-ingress
+  namespace: matomo-install-dev
+  labels:
+    name: matomo-install-ingress
+    namespace: matomo-install-dev
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+      - pshung.tk
+      secretName: matomo-install-secret-tls
+  rules:
+  - host: pshung.tk
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: matomo-install-dev
+            port: 
+              number: 8880

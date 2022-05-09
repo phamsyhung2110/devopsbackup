@@ -17,6 +17,9 @@ matomo:
     memory_db:
     cpu_matomo:
     cpu_db:
+  ingressname:
+  ingress_backend:
+  ingresslabelname:
 
 
 

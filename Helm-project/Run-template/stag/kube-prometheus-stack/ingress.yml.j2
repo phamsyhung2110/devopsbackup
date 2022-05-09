@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ env.ingressname|default("kube-promethues-stack-ingress", true) }}
+  namespace: {{ env.namespace|default("monitoring", true) }}
+  labels:
+    name: {{ env.ingresslabelname|default("kube-promethues-stack-ingress", true) }}
+    namespace: {{ env.namespace|default("monitoring", true) }}
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+      - pshung.tk
+      secretName: {{ env.secret_tls_name|default("kube-promethues-stack-secret-tls", true) }}
+  rules:
+  - host: pshung.tk
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: {{ env.ingress_backend|default("promethues-grafana", true) }}
+            port: 
+              number: 8080

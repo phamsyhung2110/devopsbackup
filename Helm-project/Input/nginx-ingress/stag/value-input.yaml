@@ -1,8 +1,0 @@
-nginx-ingress:
-  namespace:
-  controllerkind:
-  svcmonitor: 
-    release_promethues:
-    nodeports: 
-      http: 
-      https:

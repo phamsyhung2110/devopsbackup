@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ env.ingressname|default("lhc-install-ingress", true) }}
+  namespace: {{ env.namespace|default("lhc-install-prod", true) }}
   labels:
     name: {{ env.ingresslabelname|default("lhc-install-ingress", true) }}
     namespace: {{ env.namespace|default("lhc-install-prod", true) }}
@@ -19,6 +20,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: {{ env.ingress_backend|default("lhc-install-prod", true) }}
+            name: {{ env.ingress_backend|default("lhc-install-app-prod", true) }}
             port: 
-              number: 8080
+              number: 8081

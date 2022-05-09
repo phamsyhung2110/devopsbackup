@@ -6,7 +6,7 @@ env: {{ matomo.env|default("dev", true)}}
 port_matomo: {{ matomo.port|default("80", true)}}
 nodeport_matomo: {{ matomo.nodeport|default("31880", true)}}
 svcport_matomo: {{ matomo.svcport|default("8880", true)}}
-ingress_svc_name:  {{ matomo.ingress_name|default("matomo-install-devolopment", true)}}
+ingress_svc_name:  {{ matomo.ingress_name|default("matomo-install-dev", true)}}
 ### Resources ###
 resources_matomo:
   limits:

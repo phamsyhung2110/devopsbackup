@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{nginx.ingressname|default("nginx-app-install-ingress", true) }}
+  namespace: {{nginx.namespace|default("nginx-app-install-prod", true) }}
   labels:
     name: {{nginx.ingresslabelname|default("nginx-app-install-ingress", true) }}
     namespace: {{nginx.namespace|default("nginx-app-install-prod", true) }}

@@ -1,0 +1,14 @@
+USER-SUPPLIED VALUES:
+controller:
+  kind: {{ nginxingress.controllerkind|default("DaemonSet",true) }}
+  metrics:
+    enabled: true
+    serviceMonitor:
+      additionalLabels:
+        release: {{ nginxingress.svcmonitor.release_promethues|default("prometheus-grafana",true) }}
+      enabled: true
+  service: 
+    nodePorts:
+      http: {{ nginxingress.nodeports.http|default("31826",true) }}
+      https: {{ nginxingress.nodeports.https|default("31827",true) }}
+  
