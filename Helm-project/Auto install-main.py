@@ -8,7 +8,7 @@ import subprocess
 import fnmatch,yaml,jinja2,time
 from unicodedata import name
 from jinja2 import Template
-#
+
 action = sys.argv[1]
 release_name = sys.argv[2]
 chart_dir = sys.argv[3]
@@ -31,14 +31,6 @@ while True:
                 path_app = os.path.join(root,dirname) # Path from specified directory
                 root_app = os.path.abspath(path_app)  # Path from root directory
                 return root_app
-    # def get_input_file():
-    #     global chart_dir, env, project_dir
-    #     input_dir =project_dir + "Input\\%s\\%s\\"%(env,chart_dir)
-    #     # pattern = "input-%s-%s*.yaml"%(env,chart_dir)
-    #     for file in glob.glob(input_dir + "*.yaml"):
-    #         # print("Input file directory: " + os.path.abspath(file))
-    #         file_locate = str(os.path.abspath(file))
-    #         return file_locate
     def get_input_file():
         global chart_dir, env, project_dir
         input_dir =project_dir + "Input\\"
@@ -82,17 +74,7 @@ while True:
     print("Input file: "+ input_file)
     print("Value file:  " + value_file_tem)
     print("Run file:  " + str(run_file_tem))
-    # def get_input_open():
-    #         data = {}
-    #         for per_input_file in input_file:
-    #             with open(per_input_file, 'r', encoding='UTF-8') as file:
-    #                 # return file.read()
-    #                 yaml_data_input = yaml.safe_load(file)
-    #                 for key,value in yaml_data_input.items():
-    #                     data.update({key:value})
-    #                     data_input = yaml.dump(data).replace("null","")
-    #                     print(data_input)
-    #                     return data_input
+  
     def get_input_file():
         global chart_dir, env, project_dir
         input_dir =project_dir + "Input\\"

@@ -1,0 +1,19 @@
+## For lhc-app-install ###
+
+dbsvcport: 
+dbtgport: 1000000
+
+php_resquesvcport: 
+php_resquetgport: 2000
+
+redissvcport: 
+redistgport:   
+
+
+
+  
+
+
+
+
+  

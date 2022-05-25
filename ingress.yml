@@ -1,14 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-app-install
-  namespace: ingress-nginx
+  name: {{ ingressnname |default("lhc-install-ingress",true)}}
+  namespace: {{ env.namespace |default(nginx-app-install-production,true)}}
   labels:
     name: nginx-app-install
 spec:
+  # tls:
+  #     - hosts:
+  #       - pshung.tk
+  #       secretName: lhc-secret-tls
   ingressClassName: nginx
   rules:
-  - host: pshung.2k
+  - host: pshung.tk
     http:
       paths:
       - pathType: Prefix

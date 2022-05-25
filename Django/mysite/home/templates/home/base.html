@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home page</title>
+    <link rel="stylesheet" href="{% static 'home/style.css' %}">
+</head>
+<body>
+    <div class='menu'>
+        <u1>
+            {% comment %} <li>menu 1</li>
+            <li>menu 2</li> {% endcomment %}
+            <li><a href="{% url 'home:home' %}">Home</a></li>
+            <li><a href="{% url 'blog:blog' %}">Blogs</a></li>
+            <li><a href="{% url 'contact:contact' %}">Contact</a></li>
+        </u1>
+    </div>
+    <div class="content">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+</body>
+</html>
