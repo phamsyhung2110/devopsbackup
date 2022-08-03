@@ -1,0 +1,41 @@
+pipeline {
+    agent{
+        label "node"
+    }
+    environment {
+        SSH_USER = "ubuntu"
+        SSH_KEY = "./hungaws.pem"
+        registry = "phamsyhung1110/testjenkins"
+
+    }
+    stages{
+        stage("build"){
+            when {
+                branch "testjenkins"
+            }
+            steps{
+                echo "========Executing Build========"
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                    sh '''docker build -t phamsyhung1110/testjenkins:imagejenkins1 .
+                          docker push phamsyhung1110/testjenkins:imagejenkins1'''
+                }
+                }
+            }
+            
+        }
+        stage("Deploy"){
+            when {
+                branch "testjenkins"
+            }
+            steps {
+                echo "Deploying"
+                sshagent(credentials: ['SSH_UAT_PROD']) {
+                    sh '''
+                      ssh -o StricHostKeyChecking=no root@172.31.33.126
+                      mkdir /var/hung/
+                      '''
+                }
+            }
+        }
+    }
+}
